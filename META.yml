@@ -1,11 +1,15 @@
+--- 
 abstract: The DWIM Perl Debugger
 author: Adam Kennedy <adamk@cpan.org>
 build_requires: 
   Test::More: 0.47
-  Test::Script: 0.01
+  Test::Script: 1.02
 distribution_type: module
-generated_by: Module::Install version 0.64
+generated_by: Module::Install version 0.67
 license: perl
+meta-spec: 
+  url: http://module-build.sourceforge.net/META-spec-v1.3.html
+  version: 1.3
 name: pler
 no_index: 
   directory: 
@@ -17,4 +21,4 @@ requires:
   File::Spec: 0.80
   File::Which: 0.05
   perl: 5.005
-version: 0.16
+version: 0.18
