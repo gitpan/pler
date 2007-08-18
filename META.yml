@@ -5,7 +5,7 @@ build_requires:
   Test::More: 0.47
   Test::Script: 1.02
 distribution_type: module
-generated_by: Module::Install version 0.67
+generated_by: Module::Install version 0.65
 license: perl
 meta-spec: 
   url: http://module-build.sourceforge.net/META-spec-v1.3.html
@@ -16,9 +16,9 @@ no_index:
     - inc
     - t
 requires: 
-  Exporter: 0
+  Config: 0
   File::Find::Rule: 0.20
   File::Spec: 0.80
   File::Which: 0.05
   perl: 5.005
-version: 0.18
+version: 0.20
