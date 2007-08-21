@@ -16,8 +16,9 @@ no_index:
     - inc
     - t
 requires: 
+  Cwd: 3.00
   File::Find::Rule: 0.20
   File::Spec: 0.80
   File::Which: 0.05
   perl: 5.005
-version: 0.22
+version: 0.23
