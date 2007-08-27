@@ -20,5 +20,6 @@ requires:
   File::Find::Rule: 0.20
   File::Spec: 0.80
   File::Which: 0.05
+  Getopt::Long: 0
   perl: 5.005
-version: 0.25
+version: 0.26
