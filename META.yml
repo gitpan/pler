@@ -22,4 +22,4 @@ requires:
   File::Which: 0.05
   Getopt::Long: 0
   perl: 5.005
-version: 0.26
+version: 0.27
