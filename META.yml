@@ -16,10 +16,12 @@ no_index:
     - inc
     - t
 requires: 
+  Carp: 0
   Cwd: 3.00
   File::Find::Rule: 0.20
   File::Spec: 0.80
   File::Which: 0.05
   Getopt::Long: 0
+  blib: 0
   perl: 5.005
-version: 0.27
+version: 0.28
