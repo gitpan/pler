@@ -24,4 +24,4 @@ requires:
   Getopt::Long: 0
   blib: 0
   perl: 5.005
-version: 0.28
+version: 0.29
