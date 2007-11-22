@@ -17,4 +17,5 @@ README
 script/pler
 t/01_compile.t
 t/02_functions.t
-t/99_author.t
+t/98_pod.t
+t/99_pmv.t
