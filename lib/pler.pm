@@ -18,7 +18,7 @@ use constant FFR     => 'File::Find::Rule';
 
 use vars qw{$VERSION};
 BEGIN {
-        $VERSION = '0.32';
+        $VERSION = '0.33';
 }
 
 # Does exec work on this platform
@@ -200,6 +200,7 @@ sub run ($) {
 sub handoff (@) {
 	my $cmd = join ' ', @_;
 	verbose( "> $cmd" );
+	$ENV{HARNESS_ACTIVE} = 1;
 	if ( EXEC_OK ) {
 		exec( @_ ) or croak("Failed to exec '$cmd'");
 	} else {
@@ -415,7 +416,7 @@ L<prove>, L<http://ali.as/>
 
 =head1 COPYRIGHT
 
-Copyright 2006 - 2007 Adam Kennedy.
+Copyright 2006 - 2008 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
