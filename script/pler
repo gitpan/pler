@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+use 5.00503;
 use strict;
 
 # On some platforms (mostly Windows), we get errors because
@@ -13,7 +14,7 @@ BEGIN {
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.34';
+	$VERSION = '1.00';
 }
 
 use pler ();

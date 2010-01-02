@@ -2,20 +2,21 @@ package pler;
 
 # See 'sub main' for main functionality
 
-use 5.005;
+use 5.00503;
 use strict;
 use Config;
-use Carp                  'croak';
-use Cwd                   ();
-use File::Which           ();
-use File::Spec::Functions ':ALL';
-use File::Find::Rule      ();
-use Getopt::Long          ();
-use Probe::Perl           ();
+use Carp                     0 ();
+use Cwd                   3.00 ();
+use File::Which           0.05 ();
+use File::Spec            0.80 ();
+use File::Spec::Functions      ':ALL';
+use File::Find::Rule      0.20 ();
+use Getopt::Long             0 ();
+use Probe::Perl           0.01 ();
 
 use vars qw{$VERSION};
 BEGIN {
-        $VERSION = '0.34';
+        $VERSION = '1.00';
 }
 
 # Does exec work on this platform
@@ -57,7 +58,7 @@ sub make () {
 	my $make  = $Config::Config{make};
 	my $found = File::Which::which( $make );
 	unless ( $found ) {
-		croak("Failed to find '$make' (as specified by \$Config{make})");
+		Carp::croak("Failed to find '$make' (as specified by \$Config{make})");
 	}
 	return $found;
 }
@@ -72,6 +73,10 @@ sub lib () {
 
 sub t () {
 	catdir( curdir(), 't' );
+}
+
+sub xt () {
+	catdir( curdir(), 'xt' );
 }
 
 
@@ -114,6 +119,10 @@ sub has_lib () {
 
 sub has_t () {
 	!! -d t;
+}
+
+sub has_xt () {
+	!! -d xt;
 }
 
 sub in_distroot () {
@@ -199,7 +208,7 @@ sub handoff (@) {
 	verbose( "> $cmd" );
 	$ENV{HARNESS_ACTIVE} = 1;
 	if ( EXEC_OK ) {
-		exec( @_ ) or croak("Failed to exec '$cmd'");
+		exec( @_ ) or Carp::croak("Failed to exec '$cmd'");
 	} else {
 		system( @_ );
 		exit(0);
@@ -299,17 +308,14 @@ sub main {
 
         } else {
 		# Get the list of possible tests
-		my @possible = File::Find::Rule->name('*.t')->file->in('t');
+		my @directory = ( 't', has_xt ? 'xt' : () );
+		my @possible  = File::Find::Rule->name('*.t')->file->in(@directory);
 
-		# Look for a naive string match
-		my $pattern = quotemeta $script;
-		my @matches = grep { /$pattern/i } @possible;
-
-		# If there are subfilters, apply them as well
-		while ( @ARGV ) {
-			my $subpattern = quotemeta shift @ARGV;
-			@matches = grep { /$subpattern/i } @matches;
-		}
+		# Filter by the search terms to find matching tests
+		my @matches = filter(
+			[ $script, @ARGV ],
+			[ @possible ],
+		);
 		unless ( @matches ) {
 			error "No tests match '$script'";
 		}
@@ -324,9 +330,9 @@ sub main {
 		# Localize the path
 		$script = File::Spec->catfile( split /\//, $script );
 	}
-    unless ( -f $script ) {
-        error "Test script '$script' does not exist";
-    }
+	unless ( -f $script ) {
+		error "Test script '$script' does not exist";
+	}
 
         # Rerun make or Build if needed
 	if ( $BUILD_SYSTEM eq 'make' ) {
@@ -357,6 +363,32 @@ sub main {
 	}
 	my @cmd = ( perl, @flags, '-d', $script );
 	handoff( @cmd );
+}
+
+# Encapsulates the smart filtering as a function
+sub filter {
+	my $terms    = shift;
+	my $possible = shift;
+	my @matches  = @$possible;
+
+	while ( @$terms ) {
+		my $term = shift @$terms;
+
+		if ( ref $term eq 'Regexp' ) {
+			# If the term is a regexp apply it directly
+			@matches = grep { $_ =~ $term } @matches;
+		} elsif ( $term =~ /^[1-9]\d*$/ ) {
+			# If the search is a pure integer (without leading
+			# zeros) attempt a specialised numeric filter.
+			@matches = grep { /\b0*${term}_/ } @matches;
+		} else {
+			# Otherwise treat it as a naive string match
+			$term = quotemeta $term;
+			@matches = grep { /$term/i } @matches;
+		}
+	}
+
+	return \@matches;
 }
 
 sub help { print <<'END_HELP'; exit(0); }
@@ -413,7 +445,7 @@ L<prove>, L<http://ali.as/>
 
 =head1 COPYRIGHT
 
-Copyright 2006 - 2008 Adam Kennedy.
+Copyright 2006 - 2010 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
