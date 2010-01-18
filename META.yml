@@ -21,7 +21,6 @@ no_index:
     - inc
     - t
 requires:
-  Carp: 0
   Cwd: 3.00
   File::Find::Rule: 0.20
   File::Spec: 0.80
@@ -34,4 +33,4 @@ resources:
   ChangeLog: http://fisheye2.atlassian.com/changelog/cpan/trunk/pler
   license: http://dev.perl.org/licenses/
   repository: http://svn.ali.as/cpan/trunk/pler
-version: 1.02
+version: 1.03
